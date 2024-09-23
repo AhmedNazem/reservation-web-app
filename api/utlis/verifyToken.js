@@ -19,16 +19,16 @@ export const verifyUser = (req, res, next) => {
     if (req.user.id === req.params.id || req.user.isAdmin) {
       next(); // User is authorized
     } else {
-      return next(appError(403, "You are not authorized"));
+      return next(appError(401, "You are not authorized"));
     }
   });
 };
 export const verifyAdmin = (req, res, next) => {
-  verifyToken(req, res, () => {
+  verifyToken(req, res, next, () => {
     if (req.user.isAdmin) {
       next(); // User is authorized
     } else {
-      return next(appError(403, "You are not authorized"));
+      return next(appError(401, "You are not authorized"));
     }
   });
 };

@@ -25,7 +25,7 @@ app.use("/api/rooms", roomsRouter);
 app.use("/api/users", userRouter);
 
 app.use((err, req, res, next) => {
-  const errStatus = err.status || 500;
+  const errStatus = err.statusCode || 500;
   const errMessage = err.message || "internal server error";
   return res.status(errStatus).json({
     status: "fail",
