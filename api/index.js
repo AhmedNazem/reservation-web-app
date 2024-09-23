@@ -1,5 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
+import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import authRouter from "./routes/authRoute.js";
 import hotelRouter from "./routes/hotelRoute.js";
@@ -17,6 +18,7 @@ const connectionDB = async () => {
   }
 };
 app.use(express.json());
+app.use(cookieParser());
 app.use("/api/auth", authRouter);
 app.use("/api/hotels", hotelRouter);
 app.use("/api/rooms", roomsRouter);

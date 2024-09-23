@@ -6,8 +6,13 @@ import {
   getHotel,
   updateHotel,
 } from "../controller/hotelController.js";
+import { verifyAdmin } from "../utlis/verifyToken.js";
 
 const hotelRouter = express.Router();
-hotelRouter.route("/").post(createHotel).get(getAllHotels);
-hotelRouter.route("/:id").get(getHotel).patch(updateHotel).delete(deleteHotel);
+hotelRouter.route("/").post(verifyAdmin, createHotel).get(getAllHotels);
+hotelRouter
+  .route("/:id")
+  .get(getHotel)
+  .patch(verifyAdmin, updateHotel)
+  .delete(verifyAdmin, deleteHotel);
 export default hotelRouter;
