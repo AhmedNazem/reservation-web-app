@@ -4,7 +4,7 @@ import { Hotel } from "../models/hotelModel.js";
 
 // Create a Room
 export const createRoom = async (req, res, next) => {
-  const hotelId = req.params.id;
+  const { hotelId } = req.params;
   const { title, price, maxPeople, desc, roomNumbers } = req.body;
 
   try {
@@ -70,21 +70,26 @@ export const updateRoom = async (req, res, next) => {
 
 // Delete a Room
 export const deleteRoom = async (req, res, next) => {
-  const hotelId = req.params.hotelId;
+  const { hotelId, roomId } = req.params; // Destructuring both hotelId and roomId
 
   try {
-    const room = await Room.findByIdAndDelete(req.params.id);
+    // Delete the room
+    const room = await Room.findByIdAndDelete(roomId);
     if (!room) return next(appError(404, "Room not found!"));
 
-    await Hotel.findByIdAndUpdate(hotelId, { $pull: { rooms: req.params.id } });
+    // Update the hotel to remove the room from its 'rooms' array
+    const updatedHotel = await Hotel.findByIdAndUpdate(hotelId, {
+      $pull: { rooms: roomId },
+    });
 
-    res
-      .status(200)
-      .json({
-        status: "success",
-        message: "Room deleted successfully",
-        data: {},
-      });
+    if (!updatedHotel) return next(appError(404, "Hotel not found!"));
+
+    // Send success response
+    res.status(200).json({
+      status: "success",
+      message: "Room deleted successfully",
+      data: {},
+    });
   } catch (err) {
     next(appError(500, `Failed to delete room: ${err.message}`));
   }

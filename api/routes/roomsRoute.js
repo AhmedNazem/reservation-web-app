@@ -9,10 +9,10 @@ import {
 import { verifyAdmin } from "../utlis/verifyToken.js";
 const roomsRouter = express.Router();
 roomsRouter.route("/").get(verifyAdmin, getAllRooms);
-roomsRouter
-  .route("/:id")
-  .post(verifyAdmin, createRoom)
-  .get(getRoom)
-  .patch(verifyAdmin, updateRoom)
-  .delete(verifyAdmin, deleteRoom);
+
+roomsRouter.route("/:id").get(getRoom).patch(verifyAdmin, updateRoom);
+
+roomsRouter.route("/:hotelId").post(verifyAdmin, createRoom);
+roomsRouter.route("/:roomId/:hotelId").delete(verifyAdmin, deleteRoom);
+
 export default roomsRouter;
